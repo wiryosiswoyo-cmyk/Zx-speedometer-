@@ -1,0 +1,380 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>ZX DIGITAL DASH</title>
+
+<style>
+* {
+  box-sizing: border-box;
+}
+
+body {
+  margin: 0;
+  background: #050505;
+  color: white;
+  font-family: Arial, sans-serif;
+  min-height: 100vh;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.dashboard {
+  width: 100%;
+  max-width: 600px;
+  min-height: 100vh;
+  padding: 25px 20px;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+}
+
+.title {
+  text-align: center;
+  font-size: 18px;
+  letter-spacing: 4px;
+  opacity: .7;
+  margin-bottom: 15px;
+}
+
+.speed-box {
+  text-align: center;
+  margin-bottom: 20px;
+}
+
+.speed {
+  font-size: clamp(90px, 25vw, 150px);
+  font-weight: bold;
+  line-height: .9;
+}
+
+.unit {
+  font-size: 20px;
+  letter-spacing: 3px;
+  opacity: .6;
+}
+
+.rpm-box {
+  margin: 20px 0;
+}
+
+.rpm-label {
+  display: flex;
+  justify-content: space-between;
+  font-size: 13px;
+  opacity: .7;
+}
+
+.rpm-bar {
+  height: 18px;
+  background: #222;
+  border-radius: 10px;
+  overflow: hidden;
+  margin-top: 7px;
+}
+
+.rpm-fill {
+  height: 100%;
+  width: 0%;
+  background: linear-gradient(90deg, #00ff66, #ffff00, #ff3300);
+  transition: width .15s;
+}
+
+.shift {
+  text-align: center;
+  font-size: 18px;
+  font-weight: bold;
+  letter-spacing: 4px;
+  min-height: 25px;
+}
+
+.info {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 12px;
+  margin-top: 20px;
+}
+
+.card {
+  background: #111;
+  border: 1px solid #292929;
+  border-radius: 14px;
+  padding: 15px;
+  text-align: center;
+}
+
+.card-label {
+  font-size: 12px;
+  opacity: .5;
+  margin-bottom: 6px;
+}
+
+.card-value {
+  font-size: 22px;
+  font-weight: bold;
+}
+
+button {
+  margin-top: 22px;
+  width: 100%;
+  padding: 16px;
+  border: 0;
+  border-radius: 14px;
+  background: white;
+  color: black;
+  font-size: 17px;
+  font-weight: bold;
+}
+
+button:active {
+  transform: scale(.98);
+}
+
+.status {
+  text-align: center;
+  margin-top: 12px;
+  font-size: 13px;
+  opacity: .6;
+}
+</style>
+</head>
+
+<body>
+
+<div class="dashboard">
+
+  <div class="title">ZX DIGITAL DASH</div>
+
+  <div class="speed-box">
+    <div class="speed" id="speed">0</div>
+    <div class="unit">KM/H</div>
+  </div>
+
+  <div class="rpm-box">
+    <div class="rpm-label">
+      <span>RPM (SIMULATED)</span>
+      <span id="rpm">0</span>
+    </div>
+
+    <div class="rpm-bar">
+      <div class="rpm-fill" id="rpmFill"></div>
+    </div>
+  </div>
+
+  <div class="shift" id="shift"></div>
+
+  <div class="info">
+
+    <div class="card">
+      <div class="card-label">MAX SPEED</div>
+      <div class="card-value" id="maxSpeed">0 km/h</div>
+    </div>
+
+    <div class="card">
+      <div class="card-label">DISTANCE</div>
+      <div class="card-value" id="distance">0.00 km</div>
+    </div>
+
+    <div class="card">
+      <div class="card-label">HEADING</div>
+      <div class="card-value" id="heading">--°</div>
+    </div>
+
+    <div class="card">
+      <div class="card-label">GPS ACCURACY</div>
+      <div class="card-value" id="accuracy">-- m</div>
+    </div>
+
+  </div>
+
+  <button onclick="startGPS()">START GPS</button>
+
+  <div class="status" id="status">
+    GPS belum aktif
+  </div>
+
+</div>
+
+<script>
+
+let watchID = null;
+let maxSpeed = 0;
+let totalDistance = 0;
+let lastPosition = null;
+
+function startGPS() {
+
+  if (!navigator.geolocation) {
+    document.getElementById("status").textContent =
+      "Browser tidak mendukung GPS";
+    return;
+  }
+
+  document.getElementById("status").textContent =
+    "Meminta akses GPS...";
+
+  watchID = navigator.geolocation.watchPosition(
+    updateGPS,
+    gpsError,
+    {
+      enableHighAccuracy: true,
+      maximumAge: 1000,
+      timeout: 15000
+    }
+  );
+}
+
+function updateGPS(position) {
+
+  const coords = position.coords;
+
+  let speed = coords.speed;
+
+  if (speed === null || isNaN(speed)) {
+    speed = 0;
+  } else {
+    speed = speed * 3.6;
+  }
+
+  speed = Math.max(0, speed);
+
+  const roundedSpeed = Math.round(speed);
+
+  document.getElementById("speed").textContent =
+    roundedSpeed;
+
+  if (speed > maxSpeed) {
+    maxSpeed = speed;
+
+    document.getElementById("maxSpeed").textContent =
+      Math.round(maxSpeed) + " km/h";
+  }
+
+  if (coords.heading !== null && !isNaN(coords.heading)) {
+    document.getElementById("heading").textContent =
+      Math.round(coords.heading) + "°";
+  }
+
+  if (coords.accuracy !== null) {
+    document.getElementById("accuracy").textContent =
+      Math.round(coords.accuracy) + " m";
+  }
+
+  /*
+    RPM SIMULASI
+    Ini bukan RPM mesin asli.
+    Hanya visual berdasarkan kecepatan GPS.
+  */
+
+  let rpm = 1500 + (speed * 100);
+
+  if (rpm > 12000) {
+    rpm = 12000;
+  }
+
+  document.getElementById("rpm").textContent =
+    Math.round(rpm);
+
+  let rpmPercent = (rpm / 12000) * 100;
+
+  document.getElementById("rpmFill").style.width =
+    rpmPercent + "%";
+
+  if (rpm >= 10500) {
+    document.getElementById("shift").textContent =
+      "SHIFT";
+  } else {
+    document.getElementById("shift").textContent =
+      "";
+  }
+
+  /*
+    DISTANCE
+  */
+
+  if (lastPosition) {
+
+    const distance = calculateDistance(
+      lastPosition.coords.latitude,
+      lastPosition.coords.longitude,
+      coords.latitude,
+      coords.longitude
+    );
+
+    /*
+      Abaikan lonjakan GPS kecil
+    */
+
+    if (distance < 0.1) {
+      totalDistance += distance;
+    }
+  }
+
+  lastPosition = position;
+
+  document.getElementById("distance").textContent =
+    totalDistance.toFixed(2) + " km";
+
+  document.getElementById("status").textContent =
+    "GPS ACTIVE";
+}
+
+
+function calculateDistance(lat1, lon1, lat2, lon2) {
+
+  const R = 6371;
+
+  const dLat =
+    (lat2 - lat1) * Math.PI / 180;
+
+  const dLon =
+    (lon2 - lon1) * Math.PI / 180;
+
+  const a =
+    Math.sin(dLat / 2) *
+    Math.sin(dLat / 2) +
+
+    Math.cos(lat1 * Math.PI / 180) *
+    Math.cos(lat2 * Math.PI / 180) *
+    Math.sin(dLon / 2) *
+    Math.sin(dLon / 2);
+
+  const c =
+    2 * Math.atan2(
+      Math.sqrt(a),
+      Math.sqrt(1 - a)
+    );
+
+  return R * c;
+}
+
+
+function gpsError(error) {
+
+  if (error.code === 1) {
+    document.getElementById("status").textContent =
+      "Akses lokasi ditolak";
+  }
+
+  else if (error.code === 2) {
+    document.getElementById("status").textContent =
+      "GPS tidak tersedia";
+  }
+
+  else if (error.code === 3) {
+    document.getElementById("status").textContent =
+      "GPS timeout";
+  }
+
+  else {
+    document.getElementById("status").textContent =
+      "GPS error";
+  }
+}
+
+</script>
+
+</body>
+  </html>
