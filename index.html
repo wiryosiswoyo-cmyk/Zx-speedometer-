@@ -1,380 +1,536 @@
 <!DOCTYPE html>
 <html lang="id">
 <head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>ZX DIGITAL DASH</title>
-
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=1,user-scalable=no">
+<meta name="theme-color" content="#050505">
+<title>ZX Digital Dash V4</title>
 <style>
-* {
-  box-sizing: border-box;
-}
-
-body {
-  margin: 0;
-  background: #050505;
-  color: white;
-  font-family: Arial, sans-serif;
-  min-height: 100vh;
-  display: flex;
-  justify-content: center;
-  align-items: center;
-}
-
-.dashboard {
-  width: 100%;
-  max-width: 600px;
-  min-height: 100vh;
-  padding: 25px 20px;
-  display: flex;
-  flex-direction: column;
-  justify-content: center;
-}
-
-.title {
-  text-align: center;
-  font-size: 18px;
-  letter-spacing: 4px;
-  opacity: .7;
-  margin-bottom: 15px;
-}
-
-.speed-box {
-  text-align: center;
-  margin-bottom: 20px;
-}
-
-.speed {
-  font-size: clamp(90px, 25vw, 150px);
-  font-weight: bold;
-  line-height: .9;
-}
-
-.unit {
-  font-size: 20px;
-  letter-spacing: 3px;
-  opacity: .6;
-}
-
-.rpm-box {
-  margin: 20px 0;
-}
-
-.rpm-label {
-  display: flex;
-  justify-content: space-between;
-  font-size: 13px;
-  opacity: .7;
-}
-
-.rpm-bar {
-  height: 18px;
-  background: #222;
-  border-radius: 10px;
-  overflow: hidden;
-  margin-top: 7px;
-}
-
-.rpm-fill {
-  height: 100%;
-  width: 0%;
-  background: linear-gradient(90deg, #00ff66, #ffff00, #ff3300);
-  transition: width .15s;
-}
-
-.shift {
-  text-align: center;
-  font-size: 18px;
-  font-weight: bold;
-  letter-spacing: 4px;
-  min-height: 25px;
-}
-
-.info {
-  display: grid;
-  grid-template-columns: 1fr 1fr;
-  gap: 12px;
-  margin-top: 20px;
-}
-
-.card {
-  background: #111;
-  border: 1px solid #292929;
-  border-radius: 14px;
-  padding: 15px;
-  text-align: center;
-}
-
-.card-label {
-  font-size: 12px;
-  opacity: .5;
-  margin-bottom: 6px;
-}
-
-.card-value {
-  font-size: 22px;
-  font-weight: bold;
-}
-
-button {
-  margin-top: 22px;
-  width: 100%;
-  padding: 16px;
-  border: 0;
-  border-radius: 14px;
-  background: white;
-  color: black;
-  font-size: 17px;
-  font-weight: bold;
-}
-
-button:active {
-  transform: scale(.98);
-}
-
-.status {
-  text-align: center;
-  margin-top: 12px;
-  font-size: 13px;
-  opacity: .6;
-}
+*{box-sizing:border-box}html,body{margin:0;width:100%;height:100%;background:#050505;color:#fff;font-family:Arial,sans-serif;overflow:hidden}
+body{display:flex;align-items:center;justify-content:center}.dash{width:100%;height:100%;max-width:1100px;padding:14px 22px;display:flex;flex-direction:column;justify-content:space-between}
+.top{display:flex;justify-content:space-between;align-items:center}.brand{font-size:14px;letter-spacing:4px;opacity:.65}.gps{font-size:12px;letter-spacing:1px}
+.dot{display:inline-block;width:9px;height:9px;border-radius:50%;background:#777;margin-right:7px}.dot.ok{background:#38e26f}.dot.bad{background:#e5484d}
+.speed-wrap{text-align:center}.speed{font-size:clamp(90px,23vw,235px);font-weight:800;line-height:.8;letter-spacing:-7px;font-variant-numeric:tabular-nums}.unit{font-size:17px;letter-spacing:5px;opacity:.55;margin-top:16px}
+.rpm-box{margin:14px auto 4px;width:min(760px,92%);text-align:center}.rpm-label{font-size:10px;letter-spacing:3px;opacity:.5}.rpm{font-size:clamp(34px,7vw,68px);font-weight:800;line-height:1;margin:5px 0 9px}.bar{height:12px;border:1px solid #303030;border-radius:20px;background:#0b0b0b;overflow:hidden}.fill{height:100%;width:0;background:#fff;border-radius:20px;transition:width .15s linear}.shift{height:16px;margin-top:6px;font-size:10px;letter-spacing:3px;opacity:0}.shift.on{opacity:.9}
+.stats{display:grid;grid-template-columns:repeat(3,1fr);gap:10px;text-align:center}.card{border:1px solid #252525;border-radius:13px;padding:11px 7px;background:#0b0b0b}.label{font-size:10px;letter-spacing:2px;opacity:.5}.value{font-size:21px;font-weight:700;margin-top:5px;font-variant-numeric:tabular-nums}
+.controls{display:flex;gap:9px;justify-content:center;flex-wrap:wrap}button{border:1px solid #333;background:#111;color:#fff;border-radius:11px;padding:11px 17px;font-size:13px}button:active{transform:scale(.97)}.hint{text-align:center;font-size:10px;opacity:.38;margin-top:6px}
+.timer-panel{width:min(760px,100%);margin:8px auto 0;padding:12px;border:1px solid #252525;border-radius:14px;background:#0b0b0b}
+.timer-title{text-align:center;font-size:10px;letter-spacing:3px;opacity:.5;margin-bottom:9px}
+.timer-targets,.timer-actions{display:flex;gap:8px;justify-content:center;flex-wrap:wrap}
+.timer-targets .target{min-width:82px}.target.active{border-color:#fff;background:#fff;color:#000}
+.timer-row{display:grid;grid-template-columns:repeat(3,1fr);gap:8px;margin:9px 0;text-align:center}
+.timer-label{font-size:9px;letter-spacing:2px;opacity:.45}.timer-value{font-size:18px;font-weight:800;margin-top:3px;font-variant-numeric:tabular-nums}
+.timer-status{font-size:13px;letter-spacing:1px;margin-top:5px}.timer-status.running{opacity:.95}.timer-status.done{font-weight:800}
+@media(orientation:portrait){.timer-value{font-size:15px}.timer-panel{padding:10px}}
+.notice{position:fixed;left:50%;top:50%;transform:translate(-50%,-50%);width:min(430px,88%);background:#111;border:1px solid #333;border-radius:18px;padding:22px;display:none;text-align:center;z-index:5;box-shadow:0 10px 40px #000}
+.notice.show{display:block}.notice h2{margin:0 0 10px;font-size:20px}.notice p{font-size:13px;line-height:1.5;opacity:.75}.notice button{margin-top:8px}
+@media(orientation:portrait){.dash{padding:14px 12px}.value{font-size:18px}}
 </style>
 </head>
-
 <body>
 
-<div class="dashboard">
-
-  <div class="title">ZX DIGITAL DASH</div>
-
-  <div class="speed-box">
-    <div class="speed" id="speed">0</div>
-    <div class="unit">KM/H</div>
-  </div>
-
-  <div class="rpm-box">
-    <div class="rpm-label">
-      <span>RPM (SIMULATED)</span>
-      <span id="rpm">0</span>
-    </div>
-
-    <div class="rpm-bar">
-      <div class="rpm-fill" id="rpmFill"></div>
+<div class="dash">
+  <div class="top">
+    <div class="brand">ZX DIGITAL DASH V4</div>
+    <div class="gps">
+      <span id="gpsDot" class="dot"></span>
+      <span id="gpsText">GPS OFF</span>
     </div>
   </div>
 
-  <div class="shift" id="shift"></div>
+  <div class="speed-wrap">
+    <div id="speed" class="speed">0</div>
+    <div class="unit">KM/H • GPS</div>
 
-  <div class="info">
-
-    <div class="card">
-      <div class="card-label">MAX SPEED</div>
-      <div class="card-value" id="maxSpeed">0 km/h</div>
+    <div class="rpm-box">
+      <div class="rpm-label">SIMULATED RPM</div>
+      <div id="rpm" class="rpm">1,200</div>
+      <div class="bar">
+        <div id="rpmFill" class="fill"></div>
+      </div>
+      <div id="shift" class="shift">SHIFT LIGHT • SIMULATION</div>
     </div>
-
-    <div class="card">
-      <div class="card-label">DISTANCE</div>
-      <div class="card-value" id="distance">0.00 km</div>
-    </div>
-
-    <div class="card">
-      <div class="card-label">HEADING</div>
-      <div class="card-value" id="heading">--°</div>
-    </div>
-
-    <div class="card">
-      <div class="card-label">GPS ACCURACY</div>
-      <div class="card-value" id="accuracy">-- m</div>
-    </div>
-
   </div>
 
-  <button onclick="startGPS()">START GPS</button>
+  <div class="stats">
+    <div class="card">
+      <div class="label">MAX</div>
+      <div id="max" class="value">0 km/h</div>
+    </div>
 
-  <div class="status" id="status">
-    GPS belum aktif
+    <div class="card">
+      <div class="label">DISTANCE</div>
+      <div id="distance" class="value">0.00 km</div>
+    </div>
+
+    <div class="card">
+      <div class="label">HEADING</div>
+      <div id="heading" class="value">—</div>
+    </div>
   </div>
 
+  <div class="timer-panel">
+    <div class="timer-title">DISTANCE TIMER</div>
+
+    <div class="timer-targets">
+      <button class="target" data-target="201">201 m</button>
+      <button class="target" data-target="500">500 m</button>
+      <button class="target" data-target="1000">1 km</button>
+    </div>
+
+    <div class="timer-row">
+      <div>
+        <div class="timer-label">TARGET</div>
+        <div id="targetLabel" class="timer-value">—</div>
+      </div>
+
+      <div>
+        <div class="timer-label">TIME</div>
+        <div id="time" class="timer-value">0.000 s</div>
+      </div>
+
+      <div>
+        <div class="timer-label">RUN</div>
+        <div id="timerStatus" class="timer-status">READY</div>
+      </div>
+    </div>
+
+    <div class="timer-actions">
+      <button id="arm">ARM TIMER</button>
+      <button id="clearTimer">CLEAR TIME</button>
+    </div>
+
+    <div class="hint">
+      Arm saat berhenti. Timer mulai otomatis saat GPS mendeteksi gerak &gt;2 km/h
+      dan berhenti saat target tercapai. Gunakan area tertutup/aman.
+    </div>
+  </div>
+
+  <div>
+    <div class="controls">
+      <button id="start">START GPS</button>
+      <button id="reset">RESET</button>
+      <button id="full">FULLSCREEN</button>
+    </div>
+
+    <div class="hint">V4 • GPS distance timer.</div>
+  </div>
+</div>
+
+<div id="notice" class="notice">
+  <h2 id="noticeTitle">GPS belum bisa dimulai</h2>
+  <p id="noticeText"></p>
+  <button id="closeNotice">OK</button>
 </div>
 
 <script>
+let watchId=null,maxSpeed=0,distanceKm=0,lastPos=null;
 
-let watchID = null;
-let maxSpeed = 0;
-let totalDistance = 0;
-let lastPosition = null;
+let timerTargetM=0,
+    timerArmed=false,
+    timerRunning=false,
+    timerDone=false,
+    timerStartMs=0,
+    runStartDistanceKm=0,
+    lastRunDistanceKm=0,
+    displayTimer=null;
 
-function startGPS() {
+const $=id=>document.getElementById(id);
 
-  if (!navigator.geolocation) {
-    document.getElementById("status").textContent =
-      "Browser tidak mendukung GPS";
-    return;
+function showNotice(title,text){
+  $("noticeTitle").textContent=title;
+  $("noticeText").textContent=text;
+  $("notice").classList.add("show");
+}
+
+$("closeNotice").onclick=()=>$("notice").classList.remove("show");
+
+function kmh(ms){
+  return Math.max(0,(ms||0)*3.6);
+}
+
+const points=[
+  [0,1200],
+  [20,2500],
+  [40,3500],
+  [60,4500],
+  [80,5500],
+  [100,6500],
+  [120,7500],
+  [140,8500],
+  [160,9500],
+  [180,10500]
+];
+
+function simulatedRPM(s){
+  if(s<=0)return 1200;
+  if(s>=180)return 10500;
+
+  for(let i=1;i<points.length;i++){
+    let [s2,r2]=points[i],
+        [s1,r1]=points[i-1];
+
+    if(s<=s2){
+      let t=(s-s1)/(s2-s1);
+      return r1+(r2-r1)*t;
+    }
   }
 
-  document.getElementById("status").textContent =
-    "Meminta akses GPS...";
+  return 10500;
+}
 
-  watchID = navigator.geolocation.watchPosition(
-    updateGPS,
-    gpsError,
-    {
-      enableHighAccuracy: true,
-      maximumAge: 1000,
-      timeout: 15000
-    }
+function updateRPM(s){
+  let r=simulatedRPM(s);
+
+  $("rpm").textContent=Math.round(r).toLocaleString("en-US");
+
+  $("rpmFill").style.width=
+    Math.min(100,r/11000*100)+"%";
+
+  $("shift").classList.toggle("on",r>=9000);
+}
+
+function haversine(a,b){
+  const R=6371,
+        dLat=(b.lat-a.lat)*Math.PI/180,
+        dLon=(b.lon-a.lon)*Math.PI/180;
+
+  const x=
+    Math.sin(dLat/2)**2+
+    Math.cos(a.lat*Math.PI/180)*
+    Math.cos(b.lat*Math.PI/180)*
+    Math.sin(dLon/2)**2;
+
+  return R*2*Math.atan2(
+    Math.sqrt(x),
+    Math.sqrt(1-x)
   );
 }
 
-function updateGPS(position) {
+function setTimerTarget(m){
+  timerTargetM=m;
+  timerArmed=false;
+  timerRunning=false;
+  timerDone=false;
 
-  const coords = position.coords;
+  timerStartMs=0;
+  runStartDistanceKm=distanceKm;
+  lastRunDistanceKm=distanceKm;
 
-  let speed = coords.speed;
+  $("targetLabel").textContent=
+    m>=1000 ? (m/1000)+" km" : m+" m";
 
-  if (speed === null || isNaN(speed)) {
-    speed = 0;
-  } else {
-    speed = speed * 3.6;
+  $("time").textContent="0.000 s";
+
+  $("timerStatus").textContent="READY";
+  $("timerStatus").className="timer-status";
+
+  document.querySelectorAll(".target").forEach(
+    b=>b.classList.toggle(
+      "active",
+      Number(b.dataset.target)===m
+    )
+  );
+}
+
+function clearTimer(){
+  timerTargetM=0;
+  timerArmed=false;
+  timerRunning=false;
+  timerDone=false;
+
+  timerStartMs=0;
+  runStartDistanceKm=distanceKm;
+  lastRunDistanceKm=distanceKm;
+
+  $("targetLabel").textContent="—";
+  $("time").textContent="0.000 s";
+
+  $("timerStatus").textContent="READY";
+  $("timerStatus").className="timer-status";
+
+  document.querySelectorAll(".target").forEach(
+    b=>b.classList.remove("active")
+  );
+}
+
+function armTimer(){
+  if(!timerTargetM){
+    showNotice(
+      "Pilih target dulu",
+      "Pilih 201 m, 500 m, atau 1 km."
+    );
+    return;
   }
 
-  speed = Math.max(0, speed);
+  timerArmed=true;
+  timerRunning=false;
+  timerDone=false;
 
-  const roundedSpeed = Math.round(speed);
+  timerStartMs=0;
+  runStartDistanceKm=distanceKm;
+  lastRunDistanceKm=distanceKm;
 
-  document.getElementById("speed").textContent =
-    roundedSpeed;
+  $("time").textContent="0.000 s";
+  $("timerStatus").textContent="ARMED";
+  $("timerStatus").className="timer-status";
+}
 
-  if (speed > maxSpeed) {
-    maxSpeed = speed;
+function updateTimer(prevDistanceKm,currentDistanceKm,s){
+  if(!timerTargetM || timerDone)return;
 
-    document.getElementById("maxSpeed").textContent =
-      Math.round(maxSpeed) + " km/h";
-  }
-
-  if (coords.heading !== null && !isNaN(coords.heading)) {
-    document.getElementById("heading").textContent =
-      Math.round(coords.heading) + "°";
-  }
-
-  if (coords.accuracy !== null) {
-    document.getElementById("accuracy").textContent =
-      Math.round(coords.accuracy) + " m";
-  }
-
-  /*
-    RPM SIMULASI
-    Ini bukan RPM mesin asli.
-    Hanya visual berdasarkan kecepatan GPS.
-  */
-
-  let rpm = 1500 + (speed * 100);
-
-  if (rpm > 12000) {
-    rpm = 12000;
-  }
-
-  document.getElementById("rpm").textContent =
-    Math.round(rpm);
-
-  let rpmPercent = (rpm / 12000) * 100;
-
-  document.getElementById("rpmFill").style.width =
-    rpmPercent + "%";
-
-  if (rpm >= 10500) {
-    document.getElementById("shift").textContent =
-      "SHIFT";
-  } else {
-    document.getElementById("shift").textContent =
-      "";
-  }
-
-  /*
-    DISTANCE
-  */
-
-  if (lastPosition) {
-
-    const distance = calculateDistance(
-      lastPosition.coords.latitude,
-      lastPosition.coords.longitude,
-      coords.latitude,
-      coords.longitude
+  const runM=
+    Math.max(
+      0,
+      (currentDistanceKm-runStartDistanceKm)*1000
     );
 
-    /*
-      Abaikan lonjakan GPS kecil
-    */
+  const prevRunM=
+    Math.max(
+      0,
+      (prevDistanceKm-runStartDistanceKm)*1000
+    );
 
-    if (distance < 0.1) {
-      totalDistance += distance;
+  if(timerArmed && !timerRunning && s>2){
+    timerRunning=true;
+    timerArmed=false;
+    timerStartMs=performance.now();
+
+    $("timerStatus").textContent="RUNNING";
+    $("timerStatus").className="timer-status running";
+  }
+
+  if(!timerRunning)return;
+
+  const target=timerTargetM;
+
+  if(runM>=target){
+    const now=performance.now();
+
+    let fraction=1;
+
+    if(runM>prevRunM && prevRunM<target){
+      fraction=
+        (target-prevRunM)/
+        (runM-prevRunM);
+
+      fraction=Math.max(
+        0,
+        Math.min(1,fraction)
+      );
+    }
+
+    const crossingMs=
+      now-
+      (1-fraction)*
+      Math.max(0,now-timerStartMs);
+
+    const elapsed=
+      Math.max(
+        0,
+        (crossingMs-timerStartMs)/1000
+      );
+
+    $("time").textContent=
+      elapsed.toFixed(3)+" s";
+
+    $("timerStatus").textContent="DONE";
+    $("timerStatus").className="timer-status done";
+
+    timerDone=true;
+    timerRunning=false;
+
+  }else{
+    const elapsed=
+      (performance.now()-timerStartMs)/1000;
+
+    $("time").textContent=
+      elapsed.toFixed(3)+" s";
+  }
+}
+
+function update(pos){
+  const c=pos.coords,
+        s=kmh(c.speed);
+
+  $("speed").textContent=Math.round(s);
+  updateRPM(s);
+
+  if(s>maxSpeed){
+    maxSpeed=s;
+    $("max").textContent=Math.round(s)+" km/h";
+  }
+
+  const prevDistanceKm=distanceKm;
+
+  if(lastPos){
+    let d=haversine(
+      lastPos,
+      {
+        lat:c.latitude,
+        lon:c.longitude
+      }
+    );
+
+    if(d<.05){
+      distanceKm+=d;
+    }
+
+    $("distance").textContent=
+      distanceKm.toFixed(2)+" km";
+  }
+
+  lastPos={
+    lat:c.latitude,
+    lon:c.longitude
+  };
+
+  updateTimer(
+    prevDistanceKm,
+    distanceKm,
+    s
+  );
+
+  if(
+    typeof c.heading==="number" &&
+    c.heading>=0
+  ){
+    let dirs=[
+      "N","NE","E","SE",
+      "S","SW","W","NW"
+    ];
+
+    $("heading").textContent=
+      dirs[Math.round(c.heading/45)%8];
+  }
+
+  $("gpsDot").className="dot ok";
+
+  $("gpsText").textContent=
+    c.accuracy
+      ? "GPS ±"+Math.round(c.accuracy)+"m"
+      : "GPS OK";
+}
+
+function error(err){
+  $("gpsDot").className="dot bad";
+
+  let msg;
+
+  if(err.code===1){
+    msg=
+      "Akses lokasi ditolak. Buka pengaturan izin Chrome dan pilih Izinkan saat menggunakan aplikasi, lalu muat ulang halaman.";
+  }
+  else if(err.code===2){
+    msg=
+      "Lokasi belum tersedia. Pastikan Location HP aktif dan coba di tempat dengan pandangan langit lebih terbuka.";
+  }
+  else if(err.code===3){
+    msg=
+      "GPS timeout. Coba lagi beberapa detik.";
+  }
+  else{
+    msg=
+      "Browser tidak dapat membaca lokasi.";
+  }
+
+  $("gpsText").textContent="GPS ERROR";
+
+  showNotice(
+    "GPS tidak tersedia",
+    msg
+  );
+}
+
+$("start").onclick=()=>{
+  if(
+    !window.isSecureContext &&
+    location.hostname!=="localhost"
+  ){
+    showNotice(
+      "Halaman belum HTTPS",
+      "Chrome biasanya hanya mengizinkan GPS untuk halaman HTTPS atau localhost. File yang dibuka langsung dari Downloads (content://...) dapat ditolak. Upload file ini ke hosting HTTPS lalu buka alamat https://-nya."
+    );
+
+    return;
+  }
+
+  if(!navigator.geolocation){
+    showNotice(
+      "Browser tidak mendukung GPS",
+      "Gunakan Chrome versi terbaru."
+    );
+
+    return;
+  }
+
+  navigator.geolocation.getCurrentPosition(
+    ()=>{
+      if(watchId!==null){
+        navigator.geolocation.clearWatch(watchId);
+      }
+
+      watchId=
+        navigator.geolocation.watchPosition(
+          update,
+          error,
+          {
+            enableHighAccuracy:true,
+            maximumAge:500,
+            timeout:10000
+          }
+        );
+
+      $("start").textContent="GPS RUNNING";
+    },
+    error,
+    {
+      enableHighAccuracy:true,
+      maximumAge:0,
+      timeout:10000
+    }
+  );
+};
+
+$("reset").onclick=()=>{
+  maxSpeed=0;
+  distanceKm=0;
+  lastPos=null;
+
+  $("speed").textContent="0";
+  $("max").textContent="0 km/h";
+  $("distance").textContent="0.00 km";
+  $("heading").textContent="—";
+
+  updateRPM(0);
+  clearTimer();
+};
+
+document.querySelectorAll(".target").forEach(
+  b=>b.onclick=()=>
+    setTimerTarget(
+      Number(b.dataset.target)
+    )
+);
+
+$("arm").onclick=armTimer;
+
+$("clearTimer").onclick=clearTimer;
+
+$("full").onclick=async()=>{
+  try{
+    if(!document.fullscreenElement){
+      await document.documentElement.requestFullscreen();
+    }
+    else{
+      await document.exitFullscreen();
     }
   }
+  catch(e){}
+};
 
-  lastPosition = position;
-
-  document.getElementById("distance").textContent =
-    totalDistance.toFixed(2) + " km";
-
-  document.getElementById("status").textContent =
-    "GPS ACTIVE";
-}
-
-
-function calculateDistance(lat1, lon1, lat2, lon2) {
-
-  const R = 6371;
-
-  const dLat =
-    (lat2 - lat1) * Math.PI / 180;
-
-  const dLon =
-    (lon2 - lon1) * Math.PI / 180;
-
-  const a =
-    Math.sin(dLat / 2) *
-    Math.sin(dLat / 2) +
-
-    Math.cos(lat1 * Math.PI / 180) *
-    Math.cos(lat2 * Math.PI / 180) *
-    Math.sin(dLon / 2) *
-    Math.sin(dLon / 2);
-
-  const c =
-    2 * Math.atan2(
-      Math.sqrt(a),
-      Math.sqrt(1 - a)
-    );
-
-  return R * c;
-}
-
-
-function gpsError(error) {
-
-  if (error.code === 1) {
-    document.getElementById("status").textContent =
-      "Akses lokasi ditolak";
-  }
-
-  else if (error.code === 2) {
-    document.getElementById("status").textContent =
-      "GPS tidak tersedia";
-  }
-
-  else if (error.code === 3) {
-    document.getElementById("status").textContent =
-      "GPS timeout";
-  }
-
-  else {
-    document.getElementById("status").textContent =
-      "GPS error";
-  }
-}
-
+updateRPM(0);
 </script>
 
 </body>
-  </html>
+</html>
