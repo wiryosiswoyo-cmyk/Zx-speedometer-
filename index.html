@@ -4,1269 +4,164 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=1,user-scalable=no">
 <meta name="theme-color" content="#050505">
-<title>ZX Digital Dash V6</title>
-
+<title>ZX Digital Dash V7</title>
 <style>
-*{box-sizing:border-box}
-html,body{
- margin:0;width:100%;height:100%;background:#050505;color:#fff;
- font-family:Arial,sans-serif;overflow:hidden
-}
-body{display:flex;justify-content:center}
-.d{
- width:100%;max-width:1050px;height:100%;padding:9px 13px;
- display:flex;flex-direction:column;justify-content:space-between;
- overflow:auto
-}
-.t{
- display:flex;justify-content:space-between;font-size:10px;
- letter-spacing:3px;opacity:.7
-}
-.dot{
- display:inline-block;width:8px;height:8px;border-radius:50%;
- background:#777
-}
-.ok{background:#3e6}
-.bad{background:#e44}
-
-.s{text-align:center}
-.spd{
- font-size:clamp(82px,21vw,210px);font-weight:900;
- line-height:.82;letter-spacing:-6px
-}
-.unit{font-size:13px;letter-spacing:5px;opacity:.45;margin-top:10px}
-
-.r{
- width:90%;max-width:720px;margin:10px auto 0;text-align:center
-}
-.rl{font-size:8px;letter-spacing:3px;opacity:.45}
-.rv{font-size:clamp(30px,7vw,58px);font-weight:900}
-.bar{
- height:9px;border:1px solid #333;border-radius:20px;overflow:hidden
-}
-.fill{height:100%;width:0;background:#fff}
-.shift{
- height:12px;font-size:8px;letter-spacing:2px;opacity:0
-}
-.on{opacity:1}
-
-.stats,.info{
- display:grid;grid-template-columns:repeat(3,1fr);
- gap:6px;text-align:center
-}
-.c,.i,.timer,.hist,.graphbox{
- background:#0b0b0b;border:1px solid #242424;border-radius:11px
-}
-.c{padding:7px}
-.lab,.small{
- font-size:7px;letter-spacing:2px;opacity:.45
-}
-.val{font-size:16px;font-weight:800;margin-top:3px}
-
-.timer{
- padding:8px;width:100%;max-width:720px;margin:4px auto
-}
-.tt{
- text-align:center;font-size:8px;letter-spacing:3px;
- opacity:.5;margin-bottom:6px
-}
-.btns{
- display:flex;gap:5px;justify-content:center;flex-wrap:wrap
-}
-button{
- background:#111;color:#fff;border:1px solid #333;border-radius:8px;
- padding:7px 10px;font-size:10px
-}
-.active{background:#fff;color:#000;border-color:#fff}
-
-.tr{
- display:grid;grid-template-columns:repeat(3,1fr);
- text-align:center;margin:6px 0
-}
-.tv{font-size:14px;font-weight:800;margin-top:2px}
-.hint{text-align:center;font-size:7px;opacity:.3;margin-top:4px}
-
-.graphbox{
- width:100%;max-width:720px;margin:4px auto;padding:5px
-}
-.graphhead{
- display:flex;justify-content:space-between;
- font-size:7px;letter-spacing:2px;opacity:.45;margin-bottom:3px
-}
-canvas{
- width:100%;height:80px;display:block
-}
-
-.info{
- grid-template-columns:repeat(3,1fr);
- margin:4px auto;width:100%;max-width:720px
-}
-.i{padding:6px}
-.big{font-size:11px;font-weight:bold;margin-top:2px}
-
-.hist{
- padding:6px;width:100%;max-width:720px;margin:4px auto
-}
-.hh{
- display:flex;justify-content:space-between;
- font-size:7px;letter-spacing:2px;opacity:.5
-}
-.hl{max-height:52px;overflow:auto}
-.hi{
- display:grid;grid-template-columns:35px 55px 1fr 1fr 1fr;
- border-top:1px solid #222;padding:3px 1px;font-size:7px
-}
-
-.pb{
- display:grid;grid-template-columns:repeat(4,1fr);
- gap:4px;margin-top:5px
-}
-.pbc{
- text-align:center;border-top:1px solid #222;padding-top:4px
-}
-.pbv{font-size:10px;font-weight:bold;margin-top:2px}
-
-.notice{
- display:none;position:fixed;z-index:9;left:50%;top:50%;
- transform:translate(-50%,-50%);width:85%;max-width:420px;
- background:#111;border:1px solid #333;border-radius:15px;
- padding:18px;text-align:center;box-shadow:0 10px 40px #000
-}
-.show{display:block}
-.notice p{font-size:11px;line-height:1.5;opacity:.7}
-
-.summary{
- display:none;position:fixed;z-index:8;left:50%;top:50%;
- transform:translate(-50%,-50%);width:88%;max-width:430px;
- background:#0b0b0b;border:1px solid #333;border-radius:16px;
- padding:17px;box-shadow:0 10px 40px #000
-}
-.summary.show{display:block}
-.summary h3{
- text-align:center;margin:0 0 10px;
- letter-spacing:3px;font-size:12px
-}
-.sumgrid{
- display:grid;grid-template-columns:repeat(2,1fr);gap:5px
-}
-.sumc{
- background:#111;border:1px solid #222;border-radius:8px;
- padding:8px;text-align:center
-}
+*{box-sizing:border-box}html,body{margin:0;width:100%;height:100%;background:#050505;color:#fff;font-family:Arial,sans-serif;overflow:hidden}body{display:flex;justify-content:center}.d{width:100%;max-width:1000px;height:100%;padding:8px 12px;display:flex;flex-direction:column;justify-content:space-between;overflow:auto}.top{display:flex;justify-content:space-between;font-size:9px;letter-spacing:2px;opacity:.65}.dot{display:inline-block;width:7px;height:7px;border-radius:50%;background:#777}.ok{background:#3e6}.bad{background:#e44}.s{text-align:center}.spd{font-size:clamp(78px,20vw,205px);font-weight:900;line-height:.82;letter-spacing:-6px}.unit{font-size:12px;letter-spacing:4px;opacity:.4;margin:8px}.rpm{font-size:clamp(27px,6vw,52px);font-weight:900}.bar{width:88%;max-width:700px;height:8px;border:1px solid #333;border-radius:20px;margin:auto;overflow:hidden}.fill{height:100%;width:0;background:#fff}.shift{font-size:7px;letter-spacing:2px;opacity:0;height:10px}.on{opacity:1}.grid{display:grid;grid-template-columns:repeat(3,1fr);gap:5px}.box{background:#0b0b0b;border:1px solid #242424;border-radius:10px;padding:6px;text-align:center}.lab{font-size:7px;letter-spacing:2px;opacity:.4}.val{font-size:14px;font-weight:800;margin-top:3px}.panel{background:#0b0b0b;border:1px solid #242424;border-radius:10px;padding:7px;margin:3px auto;width:100%;max-width:720px}.title{text-align:center;font-size:7px;letter-spacing:3px;opacity:.45;margin-bottom:5px}.btns{display:flex;gap:4px;justify-content:center;flex-wrap:wrap}button{background:#111;color:#fff;border:1px solid #333;border-radius:7px;padding:6px 9px;font-size:9px}.active{background:#fff;color:#000}.tr{display:grid;grid-template-columns:repeat(3,1fr);text-align:center;margin:5px}.tv{font-size:13px;font-weight:800;margin-top:2px}.hint{text-align:center;font-size:7px;opacity:.3;margin-top:3px}canvas{width:100%;height:65px;display:block}.pb{display:grid;grid-template-columns:repeat(4,1fr);gap:3px}.hist{max-height:43px;overflow:auto;font-size:7px}.notice{display:none;position:fixed;z-index:9;left:50%;top:50%;transform:translate(-50%,-50%);width:85%;max-width:400px;background:#111;border:1px solid #333;border-radius:14px;padding:16px;text-align:center;box-shadow:0 10px 40px #000}.show{display:block}.notice p{font-size:10px;line-height:1.4;opacity:.7}
 </style>
 </head>
-
 <body>
-
 <div class="d">
 
-<div class="t">
-<span>ZX DIGITAL DASH V6</span>
-<span>
-<i id="gd" class="dot"></i>
-<span id="gt">GPS OFF</span>
-</span>
-</div>
+<div class="top"><span>ZX DIGITAL DASH V7</span><span><i id="gd" class="dot"></i> <span id="gt">GPS OFF</span></span></div>
 
 <div class="s">
-
 <div id="sp" class="spd">0</div>
 <div class="unit">KM/H • GPS</div>
-
-<div class="r">
-<div class="rl">SIMULATED RPM</div>
-<div id="rpm" class="rv">1,200</div>
+<div class="rpm" id="rpm">1,200</div>
 <div class="bar"><div id="rf" class="fill"></div></div>
 <div id="sh" class="shift">SHIFT LIGHT</div>
 </div>
 
+<div class="grid">
+<div class="box"><div class="lab">MAX</div><div id="mx" class="val">0</div></div>
+<div class="box"><div class="lab">AVG</div><div id="av" class="val">0</div></div>
+<div class="box"><div class="lab">DISTANCE</div><div id="di" class="val">0.00</div></div>
+<div class="box"><div class="lab">HEADING</div><div id="hd" class="val">—</div></div>
+<div class="box"><div class="lab">GPS ACC</div><div id="ac" class="val">—</div></div>
+<div class="box"><div class="lab">BATTERY</div><div id="bat" class="val">—</div></div>
 </div>
 
-<div class="stats">
-
-<div class="c">
-<div class="lab">MAX</div>
-<div id="mx" class="val">0 km/h</div>
-</div>
-
-<div class="c">
-<div class="lab">DISTANCE</div>
-<div id="di" class="val">0.00 km</div>
-</div>
-
-<div class="c">
-<div class="lab">HEADING</div>
-<div id="hd" class="val">—</div>
-</div>
-
-</div>
-
-<div class="timer">
-
-<div class="tt">DISTANCE TIMER</div>
-
+<div class="panel">
+<div class="title">DISTANCE TIMER</div>
 <div class="btns">
-<button class="tg" data-m="201">201 m</button>
-<button class="tg" data-m="500">500 m</button>
-<button class="tg" data-m="1000">1 km</button>
+<button class="tg" data-m="201">201m</button><button class="tg" data-m="500">500m</button><button class="tg" data-m="1000">1km</button>
 </div>
-
 <div class="tr">
-
-<div>
-<div class="small">TARGET</div>
-<div id="tl" class="tv">—</div>
+<div><div class="lab">TARGET</div><div id="tl" class="tv">—</div></div>
+<div><div class="lab">TIME</div><div id="tm" class="tv">0.000</div></div>
+<div><div class="lab">RUN</div><div id="ts" class="tv">READY</div></div>
+</div>
+<div class="btns"><button id="arm">ARM</button><button id="ct">CLEAR</button></div>
 </div>
 
-<div>
-<div class="small">TIME</div>
-<div id="tm" class="tv">0.000 s</div>
+<div class="panel">
+<div class="title">ACCELERATION</div>
+<div class="grid">
+<div class="box"><div class="lab">0-20</div><div id="a20" class="val">—</div></div>
+<div class="box"><div class="lab">0-40</div><div id="a40" class="val">—</div></div>
+<div class="box"><div class="lab">0-60</div><div id="a60" class="val">—</div></div>
+<div class="box"><div class="lab">0-100</div><div id="a100" class="val">—</div></div>
+</div>
 </div>
 
-<div>
-<div class="small">RUN</div>
-<div id="ts" class="tv">READY</div>
-</div>
-
-</div>
-
-<div class="btns">
-<button id="arm">ARM TIMER</button>
-<button id="ct">CLEAR TIME</button>
-</div>
-
-<div class="hint">
-Pilih target → ARM → timer mulai saat GPS membaca &gt;2 km/h.
-</div>
-
-</div>
-
-<div class="graphbox">
-
-<div class="graphhead">
-<span>LIVE SPEED GRAPH</span>
-<span id="graphMax">MAX 0</span>
-</div>
-
+<div class="panel">
+<div class="title">LIVE SPEED GRAPH</div>
 <canvas id="graph"></canvas>
-
 </div>
 
-<div class="info">
-
-<div class="i">
-<div class="small">GPS ACCURACY</div>
-<div id="ac" class="big">—</div>
-</div>
-
-<div class="i">
-<div class="small">BATTERY</div>
-<div id="bat" class="big">—</div>
-</div>
-
-<div class="i">
-<div class="small">GPS POINTS</div>
-<div id="pts" class="big">0</div>
-</div>
-
-</div>
-
-<div class="hist">
-
-<div class="hh">
-<span>SESSION HISTORY</span>
-<button id="ch">CLEAR</button>
-</div>
-
-<div id="hl" class="hl">
-Belum ada run.
-</div>
-
+<div class="panel">
+<div class="title">PERSONAL BEST</div>
 <div class="pb">
-
-<div class="pbc">
-<div class="small">BEST 201M</div>
-<div id="pb201" class="pbv">—</div>
+<div class="box"><div class="lab">201M</div><div id="p201" class="val">—</div></div>
+<div class="box"><div class="lab">500M</div><div id="p500" class="val">—</div></div>
+<div class="box"><div class="lab">1KM</div><div id="p1000" class="val">—</div></div>
+<div class="box"><div class="lab">MAX</div><div id="pmax" class="val">—</div></div>
+</div>
 </div>
 
-<div class="pbc">
-<div class="small">BEST 500M</div>
-<div id="pb500" class="pbv">—</div>
+<div class="panel">
+<div class="title">SESSION HISTORY</div>
+<div id="hist" class="hist">Belum ada run.</div>
 </div>
-
-<div class="pbc">
-<div class="small">BEST 1KM</div>
-<div id="pb1000" class="pbv">—</div>
-</div>
-
-<div class="pbc">
-<div class="small">BEST MAX</div>
-<div id="pbmax" class="pbv">—</div>
-</div>
-
-</div>
-
-</div>
-
-<div>
 
 <div class="btns">
-<button id="start">START GPS</button>
-<button id="summaryBtn">SUMMARY</button>
-<button id="csv">EXPORT CSV</button>
-<button id="reset">RESET</button>
-<button id="fs">FULLSCREEN</button>
+<button id="start">START GPS</button><button id="csv">CSV</button><button id="reset">RESET</button><button id="fs">FULLSCREEN</button>
 </div>
-
-<div class="hint">
-V6 Monster • GPS + Timer + Graph + Logger
+<div class="hint">V7 Compact • GPS Performance Dash</div>
 </div>
-
-</div>
-
-</div>
-
 
 <div id="no" class="notice">
-
-<h3 id="nt">GPS Error</h3>
-<p id="np"></p>
-
-<button onclick="no.classList.remove('show')">
-OK
-</button>
-
+<h3 id="nt">GPS Error</h3><p id="np"></p><button onclick="no.classList.remove('show')">OK</button>
 </div>
-
-
-<div id="sum" class="summary">
-
-<h3>SESSION SUMMARY</h3>
-
-<div class="sumgrid">
-
-<div class="sumc">
-<div class="small">MAX SPEED</div>
-<div id="smx" class="pbv">0 km/h</div>
-</div>
-
-<div class="sumc">
-<div class="small">DISTANCE</div>
-<div id="sdi" class="pbv">0.00 km</div>
-</div>
-
-<div class="sumc">
-<div class="small">GPS POINTS</div>
-<div id="spt" class="pbv">0</div>
-</div>
-
-<div class="sumc">
-<div class="small">201 M</div>
-<div id="s201" class="pbv">—</div>
-</div>
-
-<div class="sumc">
-<div class="small">500 M</div>
-<div id="s500" class="pbv">—</div>
-</div>
-
-<div class="sumc">
-<div class="small">1 KM</div>
-<div id="s1000" class="pbv">—</div>
-</div>
-
-</div>
-
-<br>
-
-<div class="btns">
-<button onclick="sum.classList.remove('show')">CLOSE</button>
-</div>
-
-</div>
-
 
 <script>
-
-/* =====================================
-   V6 CORE
-===================================== */
-
 const $=x=>document.getElementById(x);
+let wid=null,last=null,dist=0,max=0,sum=0,n=0,pts=[],target=0,armed=0,run=0,done=0,rt=0,rs=0;
+let acc={20:null,40:null,60:null,100:null},accStart=0,accDone={20:0,40:0,60:0,100:0},hist=[];
 
-let wid=null;
+function sp(x){return Math.max(0,(x||0)*3.6)}
+function rpm(s){return s<=0?1200:s>=180?10500:1200+s/180*9300}
+function hav(a,b){let R=6371,A=(b.lat-a.lat)*Math.PI/180,B=(b.lon-a.lon)*Math.PI/180,x=Math.sin(A/2)**2+Math.cos(a.lat*Math.PI/180)*Math.cos(b.lat*Math.PI/180)*Math.sin(B/2)**2;return R*2*Math.atan2(Math.sqrt(x),Math.sqrt(1-x))}
+function ur(s){let r=rpm(s);$("rpm").textContent=Math.round(r).toLocaleString();$("rf").style.width=Math.min(100,r/11000*100)+"%";$("sh").classList.toggle("on",r>9000)}
 
-let max=0;
-let dist=0;
-let last=null;
-
-let target=0;
-let armed=0;
-let running=0;
-let done=0;
-
-let startT=0;
-let runStart=0;
-
-let gpsPoints=0;
-
-let speedHistory=[];
-let sessionData=[];
-
-
-/* =====================================
-   GPS / MATH
-===================================== */
-
-function speed(x){
- return Math.max(0,(x||0)*3.6);
+function draw(){
+ let c=$("graph"),r=c.getBoundingClientRect(),d=devicePixelRatio||1;c.width=r.width*d;c.height=65*d;let x=c.getContext("2d");x.scale(d,d);x.clearRect(0,0,r.width,65);if(pts.length<2)return;let p=Math.max(20,...pts);x.beginPath();pts.forEach((v,i)=>{let X=i/(pts.length-1)*r.width,Y=61-v/p*55;i?x.lineTo(X,Y):x.moveTo(X,Y)});x.strokeStyle="#fff";x.lineWidth=2;x.stroke()
 }
 
-function rpm(s){
+function setT(m){target=m;armed=run=done=0;rs=dist;$("tl").textContent=m==1000?"1km":m+"m";$("tm").textContent="0.000";$("ts").textContent="READY";document.querySelectorAll(".tg").forEach(b=>b.classList.toggle("active",+b.dataset.m==m))}
+function clearT(){target=armed=run=done=0;rs=dist;$("tl").textContent="—";$("tm").textContent="0.000";$("ts").textContent="READY";document.querySelectorAll(".tg").forEach(b=>b.classList.remove("active"))}
 
- if(s<=0)return 1200;
-
- if(s>=180)return 10500;
-
- return 1200+(s/180)*(10500-1200);
-
-}
-
-function hav(a,b){
-
- let R=6371;
-
- let A=(b.lat-a.lat)*Math.PI/180;
- let B=(b.lon-a.lon)*Math.PI/180;
-
- let x=
- Math.sin(A/2)**2+
- Math.cos(a.lat*Math.PI/180)*
- Math.cos(b.lat*Math.PI/180)*
- Math.sin(B/2)**2;
-
- return R*2*Math.atan2(
- Math.sqrt(x),
- Math.sqrt(1-x)
- );
-
-}
-
-
-/* =====================================
-   RPM
-===================================== */
-
-function updateRPM(s){
-
- let r=rpm(s);
-
- $("rpm").textContent=
- Math.round(r).toLocaleString();
-
- $("rf").style.width=
- Math.min(100,r/11000*100)+"%";
-
- $("sh").classList.toggle(
- "on",
- r>=9000
- );
-
-}
-
-
-/* =====================================
-   GRAPH
-===================================== */
-
-function graphPush(s){
-
- speedHistory.push(s);
-
- if(speedHistory.length>90)
- speedHistory.shift();
-
- $("graphMax").textContent=
- "MAX "+Math.round(
- Math.max(...speedHistory,0)
- );
-
- drawGraph();
-
-}
-
-function drawGraph(){
-
- let c=$("graph");
-
- let rect=c.getBoundingClientRect();
-
- let dpr=window.devicePixelRatio||1;
-
- c.width=rect.width*dpr;
- c.height=80*dpr;
-
- let ctx=c.getContext("2d");
-
- ctx.scale(dpr,dpr);
-
- let w=rect.width;
- let h=80;
-
- ctx.clearRect(0,0,w,h);
-
- if(speedHistory.length<2)return;
-
- let peak=Math.max(
- 20,
- Math.max(...speedHistory)
- );
-
- ctx.beginPath();
-
- speedHistory.forEach((v,i)=>{
-
-  let x=i/(speedHistory.length-1)*w;
-
-  let y=h-(v/peak)*(h-8)-4;
-
-  if(i===0)
-  ctx.moveTo(x,y);
-  else
-  ctx.lineTo(x,y);
-
- });
-
- ctx.strokeStyle="#fff";
- ctx.lineWidth=2;
- ctx.stroke();
-
-}
-
-window.addEventListener("resize",drawGraph);
-
-
-/* =====================================
-   TIMER
-===================================== */
-
-function setTarget(m){
-
- target=m;
-
- armed=0;
- running=0;
- done=0;
-
- startT=0;
- runStart=dist;
-
- $("tl").textContent=
- m>=1000?"1 km":m+" m";
-
- $("tm").textContent="0.000 s";
-
- $("ts").textContent="READY";
-
- document.querySelectorAll(".tg")
- .forEach(b=>
- b.classList.toggle(
- "active",
- +b.dataset.m===m
- ));
-
-}
-
-function clearTimer(){
-
- target=0;
- armed=0;
- running=0;
- done=0;
-
- startT=0;
- runStart=dist;
-
- $("tl").textContent="—";
- $("tm").textContent="0.000 s";
- $("ts").textContent="READY";
-
- document.querySelectorAll(".tg")
- .forEach(b=>b.classList.remove("active"));
-
-}
-
-function updateTimer(prev,s){
-
+function timer(s){
  if(!target||done)return;
-
- let m=
- Math.max(
- 0,
- (dist-runStart)*1000
- );
-
- if(
- armed &&
- !running &&
- s>2
- ){
-
-  armed=0;
-  running=1;
-
-  startT=performance.now();
-
-  $("ts").textContent="RUNNING";
-
- }
-
- if(!running)return;
-
- if(m>=target){
-
-  let elapsed=
-  (performance.now()-startT)/1000;
-
-  $("tm").textContent=
-  elapsed.toFixed(3)+" s";
-
-  $("ts").textContent="DONE";
-
-  running=0;
-  done=1;
-
-  saveRun();
-
- }else{
-
-  $("tm").textContent=
-  ((performance.now()-startT)/1000)
-  .toFixed(3)+" s";
-
- }
-
+ let m=(dist-rs)*1000;
+ if(armed&&!run&&s>2){armed=0;run=1;rt=performance.now();$("ts").textContent="RUNNING"}
+ if(!run)return;
+ let t=(performance.now()-rt)/1000;
+ if(m>=target){$("tm").textContent=t.toFixed(3);$("ts").textContent="DONE";run=0;done=1;save()}else $("tm").textContent=t.toFixed(3)
 }
 
-
-/* =====================================
-   HISTORY
-===================================== */
-
-function history(){
-
- try{
-
-  return JSON.parse(
-   localStorage.zxv6||"[]"
-  );
-
- }catch(e){
-
-  return [];
-
- }
-
+function save(){
+ let x={t:target,s:+$("tm").textContent,m:Math.round(max),d:dist,time:new Date().toLocaleString()};
+ hist.unshift(x);hist=hist.slice(0,25);localStorage.zxv7=JSON.stringify(hist);render()
+}
+function load(){try{hist=JSON.parse(localStorage.zxv7||"[]")}catch(e){hist=[]}render()}
+function render(){
+ $("hist").innerHTML=hist.length?hist.map((x,i)=>`#${i+1} ${x.t>=1000?"1km":x.t+"m"} • ${x.s.toFixed(3)}s • ${x.m}km/h<br>`).join(""):"Belum ada run.";
+[201,500,1000].forEach(t=>{let a=hist.filter(x=>x.t==t),b=a.length?Math.min(...a.map(x=>x.s)):null;$("p"+t).textContent=b==null?"—":b.toFixed(3)+"s"});
+let m=hist.length?Math.max(...hist.map(x=>x.m)):0;$("pmax").textContent=m?m+" km/h":"—"
 }
 
-function saveRun(){
-
- let h=history();
-
- let s=
- parseFloat(
-  $("tm").textContent
- )||0;
-
- h.unshift({
-
-  t:target,
-  s:s,
-  m:Math.round(max),
-  d:dist,
-  time:new Date().toLocaleString()
-
- });
-
- localStorage.zxv6=
- JSON.stringify(
-  h.slice(0,30)
- );
-
- renderHistory();
-
+function accel(s){
+ if(s<2){accStart=0;return}
+ if(!accStart)accStart=performance.now();
+ [20,40,60,100].forEach(v=>{
+  if(!accDone[v]&&s>=v){
+   accDone[v]=1;acc[v]=(performance.now()-accStart)/1000;$("a"+v).textContent=acc[v].toFixed(3)+"s"
+  }
+ })
 }
-
-function renderHistory(){
-
- let h=history();
-
- $("hl").innerHTML=
- h.length
- ?
- h.map((x,i)=>`
-
- <div class="hi">
-
- <span>#${i+1}</span>
-
- <span>
- ${x.t>=1000?"1km":x.t+"m"}
- </span>
-
- <span>
- ${x.s.toFixed(3)}s
- </span>
-
- <span>
- ${x.m}km/h
- </span>
-
- <span>
- ${x.time||""}
- </span>
-
- </div>
-
- `).join("")
- :
- "Belum ada run.";
-
- updatePB(h);
-
-}
-
-function updatePB(h){
-
- let targets=[201,500,1000];
-
- targets.forEach(t=>{
-
-  let a=h.filter(x=>x.t===t&&x.s>0);
-
-  let best=
-  a.length
-  ?
-  Math.min(...a.map(x=>x.s))
-  :
-  null;
-
-  $("pb"+t).textContent=
-  best!==null
-  ?
-  best.toFixed(3)+" s"
-  :
-  "—";
-
- });
-
- let mx=
- h.length
- ?
- Math.max(...h.map(x=>x.m||0))
- :
- 0;
-
- $("pbmax").textContent=
- mx
- ?
- mx+" km/h"
- :
- "—";
-
-}
-
-
-/* =====================================
-   GPS UPDATE
-===================================== */
 
 function update(p){
-
- let c=p.coords;
-
- let s=speed(c.speed);
-
- let prev=dist;
-
- $("sp").textContent=
- Math.round(s);
-
- updateRPM(s);
-
- graphPush(s);
-
- if(s>max){
-
-  max=s;
-
-  $("mx").textContent=
-  Math.round(s)+" km/h";
-
- }
-
- if(
- typeof c.accuracy==="number"
- ){
-
-  $("ac").textContent=
-  "±"+Math.round(c.accuracy)+" m";
-
- }
-
- if(last){
-
-  let d=
-  hav(
-   last,
-   {
-    lat:c.latitude,
-    lon:c.longitude
-   }
-  );
-
-  /*
-   Ignore impossible GPS jumps.
-   Maximum accepted segment = 50 m.
-  */
-
-  if(d<.05){
-
-   dist+=d;
-
-  }
-
-  $("di").textContent=
-  dist.toFixed(2)+" km";
-
- }
-
- last={
-  lat:c.latitude,
-  lon:c.longitude
- };
-
- gpsPoints++;
-
- $("pts").textContent=
- gpsPoints;
-
- sessionData.push({
-
-  time:Date.now(),
-  speed:s,
-  lat:c.latitude,
-  lon:c.longitude,
-  accuracy:c.accuracy||0,
-  heading:c.heading
-
- });
-
- if(sessionData.length>5000)
- sessionData.shift();
-
- updateTimer(prev,s);
-
- if(
- typeof c.heading==="number" &&
- c.heading>=0
- ){
-
-  let a=[
-   "N","NE","E","SE",
-   "S","SW","W","NW"
-  ];
-
-  let dir=
-  a[Math.round(c.heading/45)%8];
-
-  $("hd").textContent=
-  Math.round(c.heading)+"° "+dir;
-
- }
-
- $("gd").className="dot ok";
-
- $("gt").textContent=
- c.accuracy
- ?
- "GPS ±"+Math.round(c.accuracy)+"m"
- :
- "GPS OK";
-
+ let c=p.coords,s=sp(c.speed),prev=dist;
+ $("sp").textContent=Math.round(s);ur(s);pts.push(s);if(pts.length>70)pts.shift();draw();
+ if(s>max){max=s;$("mx").textContent=Math.round(s)}
+ if(s>0){sum+=s;n++;$("av").textContent=Math.round(sum/n)}
+ if(typeof c.accuracy=="number")$("ac").textContent=Math.round(c.accuracy)+"m";
+ if(last){let d=hav(last,{lat:c.latitude,lon:c.longitude});if(d<.05)dist+=d;$("di").textContent=dist.toFixed(2)}
+ last={lat:c.latitude,lon:c.longitude};
+ accel(s);timer(s);
+ if(typeof c.heading=="number"&&c.heading>=0){let a=["N","NE","E","SE","S","SW","W","NW"];$("hd").textContent=Math.round(c.heading)+"° "+a[Math.round(c.heading/45)%8]}
+ $("gd").className="dot ok";$("gt").textContent="GPS"+(c.accuracy?" ±"+Math.round(c.accuracy)+"m":"")
 }
 
+function err(e){$("gd").className="dot bad";$("gt").textContent="GPS ERROR";$("nt").textContent="GPS tidak tersedia";$("np").textContent=e.code==1?"Izinkan lokasi untuk Chrome lalu reload halaman.":e.code==2?"Location belum tersedia.":"GPS timeout.";$("no").classList.add("show")}
 
-/* =====================================
-   GPS ERROR
-===================================== */
+$("start").onclick=()=>{if(!isSecureContext&&location.hostname!="localhost"){err({code:2});return}if(!navigator.geolocation){err({code:2});return}navigator.geolocation.getCurrentPosition(()=>{if(wid!==null)navigator.geolocation.clearWatch(wid);wid=navigator.geolocation.watchPosition(update,err,{enableHighAccuracy:true,maximumAge:500,timeout:10000});$("start").textContent="GPS RUNNING"},err,{enableHighAccuracy:true,maximumAge:0,timeout:10000})};
 
-function err(e){
+$("arm").onclick=()=>{if(!target){$("nt").textContent="Pilih target";$("np").textContent="Pilih 201m, 500m atau 1km dulu.";$("no").classList.add("show");return}armed=1;run=done=0;rs=dist;$("tm").textContent="0.000";$("ts").textContent="ARMED"};
+$("ct").onclick=clearT;
+document.querySelectorAll(".tg").forEach(b=>b.onclick=()=>setT(+b.dataset.m));
 
- $("gd").className="dot bad";
+$("reset").onclick=()=>{dist=max=sum=n=0;last=null;pts=[];accStart=0;accDone={20:0,40:0,60:0,100:0};$("sp").textContent="0";$("mx").textContent="0";$("av").textContent="0";$("di").textContent="0.00";$("hd").textContent="—";$("ac").textContent="—";[20,40,60,100].forEach(v=>$("a"+v).textContent="—");ur(0);clearT();draw()};
 
- $("gt").textContent="GPS ERROR";
+$("csv").onclick=()=>{if(!hist.length){$("nt").textContent="Belum ada data";$("np").textContent="Selesaikan minimal satu run dulu.";$("no").classList.add("show");return}let c="Target,Time,Max Speed,Distance,Date\n"+hist.map(x=>`${x.t},${x.s},${x.m},${x.d},${x.time}`).join("\n"),a=document.createElement("a");a.href=URL.createObjectURL(new Blob([c],{type:"text/csv"}));a.download="ZX_V7_history.csv";a.click()};
 
- notice(
-  "GPS tidak tersedia",
-  e.code==1
-  ?
-  "Izinkan lokasi untuk Chrome lalu reload halaman."
-  :
-  e.code==2
-  ?
-  "Lokasi belum tersedia. Pastikan Location aktif."
-  :
-  "GPS timeout, coba lagi."
- );
+$("fs").onclick=async()=>{try{document.fullscreenElement?await document.exitFullscreen():await document.documentElement.requestFullscreen()}catch(e){}};
+$("ch")?.addEventListener("click",()=>{localStorage.removeItem("zxv7");hist=[];render()});
 
-}
+async function bat(){try{let b=await navigator.getBattery(),f=()=>{$("bat").textContent=Math.round(b.level*100)+"%"+(b.charging?" ⚡":"")};f();b.onlevelchange=f;b.onchargingchange=f}catch(e){$("bat").textContent="N/A"}}
 
-function notice(t,p){
-
- $("nt").textContent=t;
- $("np").textContent=p;
-
- $("no").classList.add("show");
-
-}
-
-
-/* =====================================
-   BATTERY
-===================================== */
-
-async function battery(){
-
- try{
-
-  let b=
-  await navigator.getBattery();
-
-  let f=()=>{
-
-   $("bat").textContent=
-   Math.round(b.level*100)+"%"+
-   (b.charging?" ⚡":"");
-
-  };
-
-  f();
-
-  b.onlevelchange=f;
-  b.onchargingchange=f;
-
- }catch(e){
-
-  $("bat").textContent="N/A";
-
- }
-
-}
-
-
-/* =====================================
-   CSV EXPORT
-===================================== */
-
-function exportCSV(){
-
- if(!sessionData.length){
-
-  notice(
-   "Belum ada data",
-   "Jalankan GPS terlebih dahulu."
-  );
-
-  return;
-
- }
-
- let rows=[
-  [
-   "Time",
-   "Speed km/h",
-   "Latitude",
-   "Longitude",
-   "Accuracy m",
-   "Heading"
-  ]
- ];
-
- sessionData.forEach(x=>{
-
-  rows.push([
-
-   new Date(x.time).toISOString(),
-
-   x.speed.toFixed(2),
-
-   x.lat,
-
-   x.lon,
-
-   x.accuracy,
-
-   x.heading??""
-
-  ]);
-
- });
-
- let csv=
- rows.map(r=>
- r.map(v=>
- `"${String(v).replace(/"/g,'""')}"`
- ).join(",")
- ).join("\n");
-
- let blob=
- new Blob(
-  [csv],
-  {type:"text/csv"}
- );
-
- let url=
- URL.createObjectURL(blob);
-
- let a=
- document.createElement("a");
-
- a.href=url;
- a.download=
- "ZX_Dash_V6_"+Date.now()+".csv";
-
- a.click();
-
- URL.revokeObjectURL(url);
-
-}
-
-
-/* =====================================
-   SESSION SUMMARY
-===================================== */
-
-function showSummary(){
-
- $("smx").textContent=
- Math.round(max)+" km/h";
-
- $("sdi").textContent=
- dist.toFixed(2)+" km";
-
- $("spt").textContent=
- gpsPoints;
-
- let h=history();
-
- [201,500,1000].forEach(t=>{
-
-  let a=
-  h.filter(x=>x.t===t);
-
-  let best=
-  a.length
-  ?
-  Math.min(...a.map(x=>x.s))
-  :
-  null;
-
-  $("s"+t).textContent=
-  best!==null
-  ?
-  best.toFixed(3)+" s"
-  :
-  "—";
-
- });
-
- $("sum").classList.add("show");
-
-}
-
-
-/* =====================================
-   BUTTONS
-===================================== */
-
-$("start").onclick=()=>{
-
- if(
- !isSecureContext &&
- location.hostname!="localhost"
- ){
-
-  notice(
-   "HTTPS diperlukan",
-   "Buka versi GitHub Pages HTTPS."
-  );
-
-  return;
-
- }
-
- if(!navigator.geolocation){
-
-  notice(
-   "GPS tidak didukung",
-   "Gunakan Chrome terbaru."
-  );
-
-  return;
-
- }
-
- navigator.geolocation.getCurrentPosition(
-
- ()=>{
-
-  if(wid!==null)
-  navigator.geolocation.clearWatch(wid);
-
-  wid=
-  navigator.geolocation.watchPosition(
-   update,
-   err,
-   {
-    enableHighAccuracy:true,
-    maximumAge:500,
-    timeout:10000
-   }
-  );
-
-  $("start").textContent=
-  "GPS RUNNING";
-
- },
-
- err,
-
- {
-  enableHighAccuracy:true,
-  maximumAge:0,
-  timeout:10000
- }
-
-);
-
-
-};
-
-
-$("reset").onclick=()=>{
-
- max=0;
- dist=0;
- last=null;
- gpsPoints=0;
-
- speedHistory=[];
- sessionData=[];
-
- $("sp").textContent="0";
- $("mx").textContent="0 km/h";
- $("di").textContent="0.00 km";
- $("hd").textContent="—";
- $("ac").textContent="—";
- $("pts").textContent="0";
- $("graphMax").textContent="MAX 0";
-
- updateRPM(0);
-
- clearTimer();
-
- drawGraph();
-
-};
-
-
-$("summaryBtn").onclick=
-showSummary;
-
-
-$("csv").onclick=
-exportCSV;
-
-
-$("ct").onclick=
-clearTimer;
-
-
-$("ch").onclick=()=>{
-
- localStorage.removeItem("zxv6");
-
- renderHistory();
-
-};
-
-
-$("arm").onclick=()=>{
-
- if(!target){
-
-  notice(
-   "Pilih target dulu",
-   "Pilih 201 m, 500 m, atau 1 km."
-  );
-
-  return;
-
- }
-
- armed=1;
- running=0;
- done=0;
-
- startT=0;
- runStart=dist;
-
- $("tm").textContent=
- "0.000 s";
-
- $("ts").textContent=
- "ARMED";
-
-};
-
-
-$("fs").onclick=async()=>{
-
- try{
-
-  document.fullscreenElement
-  ?
-  await document.exitFullscreen()
-  :
-  await document.documentElement.requestFullscreen();
-
- }catch(e){}
-
-};
-
-
-document
-.querySelectorAll(".tg")
-.forEach(b=>
- b.onclick=()=>
- setTarget(+b.dataset.m)
-);
-
-
-/* =====================================
-   INIT
-===================================== */
-
-updateRPM(0);
-
-renderHistory();
-
-battery();
-
-drawGraph();
-
+ur(0);load();bat();draw();window.onresize=draw;
 </script>
-
 </body>
-  </html>
+</html>
