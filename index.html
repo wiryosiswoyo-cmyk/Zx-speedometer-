@@ -1,167 +1,362 @@
-<!doctype html>
+<!DOCTYPE html>
 <html lang="id">
 <head>
-<meta charset="utf-8">
+<meta charset="UTF-8">
 <meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=1,user-scalable=no">
-<meta name="theme-color" content="#050505">
-<title>ZX Digital Dash V7</title>
+<title>V8 ECU DASH</title>
+
 <style>
-*{box-sizing:border-box}html,body{margin:0;width:100%;height:100%;background:#050505;color:#fff;font-family:Arial,sans-serif;overflow:hidden}body{display:flex;justify-content:center}.d{width:100%;max-width:1000px;height:100%;padding:8px 12px;display:flex;flex-direction:column;justify-content:space-between;overflow:auto}.top{display:flex;justify-content:space-between;font-size:9px;letter-spacing:2px;opacity:.65}.dot{display:inline-block;width:7px;height:7px;border-radius:50%;background:#777}.ok{background:#3e6}.bad{background:#e44}.s{text-align:center}.spd{font-size:clamp(78px,20vw,205px);font-weight:900;line-height:.82;letter-spacing:-6px}.unit{font-size:12px;letter-spacing:4px;opacity:.4;margin:8px}.rpm{font-size:clamp(27px,6vw,52px);font-weight:900}.bar{width:88%;max-width:700px;height:8px;border:1px solid #333;border-radius:20px;margin:auto;overflow:hidden}.fill{height:100%;width:0;background:#fff}.shift{font-size:7px;letter-spacing:2px;opacity:0;height:10px}.on{opacity:1}.grid{display:grid;grid-template-columns:repeat(3,1fr);gap:5px}.box{background:#0b0b0b;border:1px solid #242424;border-radius:10px;padding:6px;text-align:center}.lab{font-size:7px;letter-spacing:2px;opacity:.4}.val{font-size:14px;font-weight:800;margin-top:3px}.panel{background:#0b0b0b;border:1px solid #242424;border-radius:10px;padding:7px;margin:3px auto;width:100%;max-width:720px}.title{text-align:center;font-size:7px;letter-spacing:3px;opacity:.45;margin-bottom:5px}.btns{display:flex;gap:4px;justify-content:center;flex-wrap:wrap}button{background:#111;color:#fff;border:1px solid #333;border-radius:7px;padding:6px 9px;font-size:9px}.active{background:#fff;color:#000}.tr{display:grid;grid-template-columns:repeat(3,1fr);text-align:center;margin:5px}.tv{font-size:13px;font-weight:800;margin-top:2px}.hint{text-align:center;font-size:7px;opacity:.3;margin-top:3px}canvas{width:100%;height:65px;display:block}.pb{display:grid;grid-template-columns:repeat(4,1fr);gap:3px}.hist{max-height:43px;overflow:auto;font-size:7px}.notice{display:none;position:fixed;z-index:9;left:50%;top:50%;transform:translate(-50%,-50%);width:85%;max-width:400px;background:#111;border:1px solid #333;border-radius:14px;padding:16px;text-align:center;box-shadow:0 10px 40px #000}.show{display:block}.notice p{font-size:10px;line-height:1.4;opacity:.7}
+*{box-sizing:border-box}
+body{
+ margin:0;background:#05070a;color:#eee;
+ font-family:Arial,sans-serif;
+ user-select:none
+}
+header{
+ padding:12px;text-align:center;
+ font-weight:bold;font-size:20px;
+ border-bottom:1px solid #222
+}
+#status{text-align:center;padding:7px;color:#0f0;font-size:13px}
+.grid{
+ display:grid;grid-template-columns:1fr 1fr;
+ gap:8px;padding:8px
+}
+.card{
+ background:#0d1117;border:1px solid #252b33;
+ border-radius:12px;padding:12px;text-align:center
+}
+.big{font-size:43px;font-weight:bold}
+.label{font-size:12px;color:#888}
+.wide{grid-column:1/-1}
+button{
+ background:#151b22;color:white;border:1px solid #39424d;
+ border-radius:9px;padding:10px;margin:3px;
+ font-weight:bold
+}
+button:active{transform:scale(.96)}
+input{
+ background:#080b0f;color:white;border:1px solid #39424d;
+ padding:9px;border-radius:8px;width:90px
+}
+#graph{
+ width:100%;height:150px;background:#080b0f;
+ border-radius:10px
+}
+.red{color:#ff4444}
+.green{color:#35ff75}
+.yellow{color:#ffd43b}
+.small{font-size:14px}
 </style>
 </head>
+
 <body>
-<div class="d">
 
-<div class="top"><span>ZX DIGITAL DASH V7</span><span><i id="gd" class="dot"></i> <span id="gt">GPS OFF</span></span></div>
-
-<div class="s">
-<div id="sp" class="spd">0</div>
-<div class="unit">KM/H • GPS</div>
-<div class="rpm" id="rpm">1,200</div>
-<div class="bar"><div id="rf" class="fill"></div></div>
-<div id="sh" class="shift">SHIFT LIGHT</div>
-</div>
+<header>V8 ECU DASH ⚡</header>
+<div id="status">GPS INITIALIZING...</div>
 
 <div class="grid">
-<div class="box"><div class="lab">MAX</div><div id="mx" class="val">0</div></div>
-<div class="box"><div class="lab">AVG</div><div id="av" class="val">0</div></div>
-<div class="box"><div class="lab">DISTANCE</div><div id="di" class="val">0.00</div></div>
-<div class="box"><div class="lab">HEADING</div><div id="hd" class="val">—</div></div>
-<div class="box"><div class="lab">GPS ACC</div><div id="ac" class="val">—</div></div>
-<div class="box"><div class="lab">BATTERY</div><div id="bat" class="val">—</div></div>
+
+<div class="card wide">
+ <div class="label">GPS SPEED</div>
+ <div id="speed" class="big">0.0</div>
+ <div class="label">km/h</div>
 </div>
 
-<div class="panel">
-<div class="title">DISTANCE TIMER</div>
-<div class="btns">
-<button class="tg" data-m="201">201m</button><button class="tg" data-m="500">500m</button><button class="tg" data-m="1000">1km</button>
-</div>
-<div class="tr">
-<div><div class="lab">TARGET</div><div id="tl" class="tv">—</div></div>
-<div><div class="lab">TIME</div><div id="tm" class="tv">0.000</div></div>
-<div><div class="lab">RUN</div><div id="ts" class="tv">READY</div></div>
-</div>
-<div class="btns"><button id="arm">ARM</button><button id="ct">CLEAR</button></div>
+<div class="card">
+ <div class="label">MAX</div>
+ <div id="max" class="big">0.0</div>
 </div>
 
-<div class="panel">
-<div class="title">ACCELERATION</div>
-<div class="grid">
-<div class="box"><div class="lab">0-20</div><div id="a20" class="val">—</div></div>
-<div class="box"><div class="lab">0-40</div><div id="a40" class="val">—</div></div>
-<div class="box"><div class="lab">0-60</div><div id="a60" class="val">—</div></div>
-<div class="box"><div class="lab">0-100</div><div id="a100" class="val">—</div></div>
-</div>
+<div class="card">
+ <div class="label">AVG</div>
+ <div id="avg" class="big">0.0</div>
 </div>
 
-<div class="panel">
-<div class="title">LIVE SPEED GRAPH</div>
-<canvas id="graph"></canvas>
+<div class="card">
+ <div class="label">DISTANCE</div>
+ <div id="dist">0.00 km</div>
 </div>
 
-<div class="panel">
-<div class="title">PERSONAL BEST</div>
-<div class="pb">
-<div class="box"><div class="lab">201M</div><div id="p201" class="val">—</div></div>
-<div class="box"><div class="lab">500M</div><div id="p500" class="val">—</div></div>
-<div class="box"><div class="lab">1KM</div><div id="p1000" class="val">—</div></div>
-<div class="box"><div class="lab">MAX</div><div id="pmax" class="val">—</div></div>
-</div>
+<div class="card">
+ <div class="label">HEADING</div>
+ <div id="heading">---</div>
 </div>
 
-<div class="panel">
-<div class="title">SESSION HISTORY</div>
-<div id="hist" class="hist">Belum ada run.</div>
+<div class="card">
+ <div class="label">GPS ACCURACY</div>
+ <div id="acc">---</div>
 </div>
 
-<div class="btns">
-<button id="start">START GPS</button><button id="csv">CSV</button><button id="reset">RESET</button><button id="fs">FULLSCREEN</button>
-</div>
-<div class="hint">V7 Compact • GPS Performance Dash</div>
+<div class="card">
+ <div class="label">BATTERY</div>
+ <div id="bat">---</div>
 </div>
 
-<div id="no" class="notice">
-<h3 id="nt">GPS Error</h3><p id="np"></p><button onclick="no.classList.remove('show')">OK</button>
+<div class="card">
+ <div class="label">ACCELERATION</div>
+ <div id="accel">0.00 m/s²</div>
+</div>
+
+<div class="card wide">
+ <div class="label">PERFORMANCE TIMER</div>
+ <button onclick="setTarget(201)">201 M</button>
+ <button onclick="setTarget(500)">500 M</button>
+ <button onclick="setTarget(1000)">1 KM</button>
+ <br>
+ <button onclick="arm()">ARM TIMER</button>
+ <button onclick="clearRun()">CLEAR</button>
+ <div id="target">TARGET: ---</div>
+ <div id="timer" class="big">0.000</div>
+ <div id="timerState" class="small">IDLE</div>
+</div>
+
+<div class="card wide">
+ <div class="label">0–20 / 40 / 60 / 100 KM/H</div>
+ <div id="t20">20: ---</div>
+ <div id="t40">40: ---</div>
+ <div id="t60">60: ---</div>
+ <div id="t100">100: ---</div>
+</div>
+
+<div class="card wide">
+ <div class="label">LIVE SPEED GRAPH</div>
+ <canvas id="graph"></canvas>
+</div>
+
+<div class="card wide">
+ <div class="label">SPEEDOMETER CALIBRATION</div>
+ <input id="motorSpeed" type="number" step=".1" placeholder="Motor">
+ <button onclick="captureCalibration()">CAPTURE</button>
+ <div id="cal">GPS: --- | MOTOR: --- | Δ: ---</div>
+</div>
+
+<div class="card wide">
+ <div class="label">ECU STATUS</div>
+ <div id="ecu" class="yellow">ECU NOT CONNECTED</div>
+ <div class="small">
+ RPM: --- &nbsp; TPS: --- &nbsp; TEMP: ---
+ </div>
+</div>
+
+<div class="card wide">
+ <button onclick="resetAll()">RESET SESSION</button>
+ <button onclick="exportCSV()">EXPORT CSV</button>
+ <button onclick="fullscreen()">FULLSCREEN</button>
+</div>
+
 </div>
 
 <script>
-const $=x=>document.getElementById(x);
-let wid=null,last=null,dist=0,max=0,sum=0,n=0,pts=[],target=0,armed=0,run=0,done=0,rt=0,rs=0;
-let acc={20:null,40:null,60:null,100:null},accStart=0,accDone={20:0,40:0,60:0,100:0},hist=[];
+let speed=0,maxSpeed=0,totalDist=0;
+let lastLat=null,lastLon=null,lastTime=null;
+let speeds=[],points=[];
+let target=0,armed=false,running=false;
+let startDist=0,startTime=0;
+let times={20:null,40:null,60:null,100:null};
+let calib=[];
 
-function sp(x){return Math.max(0,(x||0)*3.6)}
-function rpm(s){return s<=0?1200:s>=180?10500:1200+s/180*9300}
-function hav(a,b){let R=6371,A=(b.lat-a.lat)*Math.PI/180,B=(b.lon-a.lon)*Math.PI/180,x=Math.sin(A/2)**2+Math.cos(a.lat*Math.PI/180)*Math.cos(b.lat*Math.PI/180)*Math.sin(B/2)**2;return R*2*Math.atan2(Math.sqrt(x),Math.sqrt(1-x))}
-function ur(s){let r=rpm(s);$("rpm").textContent=Math.round(r).toLocaleString();$("rf").style.width=Math.min(100,r/11000*100)+"%";$("sh").classList.toggle("on",r>9000)}
+const $=id=>document.getElementById(id);
+
+function hav(a,b,c,d){
+ const R=6371000;
+ const p=Math.PI/180;
+ const x=(c-a)*p;
+ const y=(d-b)*p;
+ const q=Math.sin(x/2)**2+
+ Math.cos(a*p)*Math.cos(c*p)*Math.sin(y/2)**2;
+ return R*2*Math.atan2(Math.sqrt(q),Math.sqrt(1-q));
+}
+
+function geo(pos){
+ const c=pos.coords;
+ const now=performance.now();
+
+ speed=Math.max(0,(c.speed||0)*3.6);
+
+ if(lastLat!==null){
+  const d=hav(lastLat,lastLon,c.latitude,c.longitude);
+  if(d<100) totalDist+=d;
+ }
+
+ lastLat=c.latitude;
+ lastLon=c.longitude;
+ lastTime=now;
+
+ maxSpeed=Math.max(maxSpeed,speed);
+ speeds.push(speed);
+ if(speeds.length>100) speeds.shift();
+
+ points.push({
+  t:new Date().toISOString(),
+  speed:speed,
+  lat:c.latitude,
+  lon:c.longitude,
+  acc:c.accuracy
+ });
+ if(points.length>3000)points.shift();
+
+ $("speed").textContent=speed.toFixed(1);
+ $("max").textContent=maxSpeed.toFixed(1);
+
+ const av=speeds.reduce((a,b)=>a+b,0)/speeds.length;
+ $("avg").textContent=av.toFixed(1);
+
+ $("dist").textContent=(totalDist/1000).toFixed(2)+" km";
+ $("acc").textContent=c.accuracy.toFixed(1)+" m";
+
+ if(c.heading!=null)
+  $("heading").textContent=c.heading.toFixed(0)+"°";
+
+ if(c.speed!=null){
+  const ms=c.speed;
+  $("accel").textContent=ms.toFixed(2)+" m/s";
+ }
+
+ if(armed && speed>2){
+  armed=false;
+  running=true;
+  startTime=performance.now();
+  startDist=totalDist;
+  $("timerState").textContent="RUNNING";
+ }
+
+ if(running){
+  const t=(performance.now()-startTime)/1000;
+  $("timer").textContent=t.toFixed(3);
+
+  if(target && totalDist-startDist>=target){
+   running=false;
+   $("timerState").textContent="FINISHED";
+   $("timer").textContent=t.toFixed(3);
+  }
+
+  if(times[20]===null&&speed>=20){
+   times[20]=t;$("t20").textContent="20: "+t.toFixed(3)+" s";
+  }
+  if(times[40]===null&&speed>=40){
+   times[40]=t;$("t40").textContent="40: "+t.toFixed(3)+" s";
+  }
+  if(times[60]===null&&speed>=60){
+   times[60]=t;$("t60").textContent="60: "+t.toFixed(3)+" s";
+  }
+  if(times[100]===null&&speed>=100){
+   times[100]=t;$("t100").textContent="100: "+t.toFixed(3)+" s";
+  }
+ }
+
+ draw();
+ $("status").textContent="GPS ACTIVE";
+}
+
+function gpsErr(e){
+ $("status").textContent="GPS ERROR: "+e.message;
+ $("status").className="red";
+}
+
+navigator.geolocation.watchPosition(
+ geo,gpsErr,
+ {enableHighAccuracy:true,maximumAge:500,timeout:5000}
+);
+
+function setTarget(x){
+ target=x;
+ $("target").textContent="TARGET: "+x+" M";
+}
+
+function arm(){
+ if(!target){
+  $("timerState").textContent="SELECT TARGET";
+  return;
+ }
+ armed=true;
+ running=false;
+ $("timerState").textContent="ARMED";
+}
+
+function clearRun(){
+ armed=false;
+ running=false;
+ $("timer").textContent="0.000";
+ $("timerState").textContent="IDLE";
+ times={20:null,40:null,60:null,100:null};
+ $("t20").textContent="20: ---";
+ $("t40").textContent="40: ---";
+ $("t60").textContent="60: ---";
+ $("t100").textContent="100: ---";
+}
+
+function captureCalibration(){
+ const m=parseFloat($("motorSpeed").value);
+ if(!isFinite(m))return;
+
+ const diff=speed-m;
+ const pct=m?diff/m*100:0;
+
+ calib.push({
+  gps:speed,
+  motor:m,
+  diff:diff,
+  pct:pct
+ });
+
+ $("cal").textContent=
+ "GPS: "+speed.toFixed(1)+
+ " | MOTOR: "+m.toFixed(1)+
+ " | Δ: "+diff.toFixed(1)+
+ " ("+pct.toFixed(1)+"%)";
+}
 
 function draw(){
- let c=$("graph"),r=c.getBoundingClientRect(),d=devicePixelRatio||1;c.width=r.width*d;c.height=65*d;let x=c.getContext("2d");x.scale(d,d);x.clearRect(0,0,r.width,65);if(pts.length<2)return;let p=Math.max(20,...pts);x.beginPath();pts.forEach((v,i)=>{let X=i/(pts.length-1)*r.width,Y=61-v/p*55;i?x.lineTo(X,Y):x.moveTo(X,Y)});x.strokeStyle="#fff";x.lineWidth=2;x.stroke()
+ const cv=$("graph"),ctx=cv.getContext("2d");
+ const w=cv.width=cv.clientWidth*devicePixelRatio;
+ const h=cv.height=cv.clientHeight*devicePixelRatio;
+
+ ctx.clearRect(0,0,w,h);
+ ctx.beginPath();
+
+ speeds.forEach((v,i)=>{
+  const x=i/(Math.max(1,speeds.length-1))*w;
+  const y=h-(Math.min(v,160)/160)*h;
+  i?ctx.lineTo(x,y):ctx.moveTo(x,y);
+ });
+
+ ctx.strokeStyle="#35ff75";
+ ctx.lineWidth=3;
+ ctx.stroke();
 }
 
-function setT(m){target=m;armed=run=done=0;rs=dist;$("tl").textContent=m==1000?"1km":m+"m";$("tm").textContent="0.000";$("ts").textContent="READY";document.querySelectorAll(".tg").forEach(b=>b.classList.toggle("active",+b.dataset.m==m))}
-function clearT(){target=armed=run=done=0;rs=dist;$("tl").textContent="—";$("tm").textContent="0.000";$("ts").textContent="READY";document.querySelectorAll(".tg").forEach(b=>b.classList.remove("active"))}
+async function battery(){
+ try{
+  const b=await navigator.getBattery();
+  const up=()=> $("bat").textContent=Math.round(b.level*100)+"%";
+  up();
+  b.addEventListener("levelchange",up);
+ }catch{
+  $("bat").textContent="N/A";
+ }
+}
+battery();
 
-function timer(s){
- if(!target||done)return;
- let m=(dist-rs)*1000;
- if(armed&&!run&&s>2){armed=0;run=1;rt=performance.now();$("ts").textContent="RUNNING"}
- if(!run)return;
- let t=(performance.now()-rt)/1000;
- if(m>=target){$("tm").textContent=t.toFixed(3);$("ts").textContent="DONE";run=0;done=1;save()}else $("tm").textContent=t.toFixed(3)
+function exportCSV(){
+ let csv="time,speed_kmh,lat,lon,accuracy\n";
+ points.forEach(p=>{
+  csv+=`${p.t},${p.speed},${p.lat},${p.lon},${p.acc}\n`;
+ });
+
+ const blob=new Blob([csv],{type:"text/csv"});
+ const a=document.createElement("a");
+ a.href=URL.createObjectURL(blob);
+ a.download="V8_session.csv";
+ a.click();
+ URL.revokeObjectURL(a.href);
 }
 
-function save(){
- let x={t:target,s:+$("tm").textContent,m:Math.round(max),d:dist,time:new Date().toLocaleString()};
- hist.unshift(x);hist=hist.slice(0,25);localStorage.zxv7=JSON.stringify(hist);render()
-}
-function load(){try{hist=JSON.parse(localStorage.zxv7||"[]")}catch(e){hist=[]}render()}
-function render(){
- $("hist").innerHTML=hist.length?hist.map((x,i)=>`#${i+1} ${x.t>=1000?"1km":x.t+"m"} • ${x.s.toFixed(3)}s • ${x.m}km/h<br>`).join(""):"Belum ada run.";
-[201,500,1000].forEach(t=>{let a=hist.filter(x=>x.t==t),b=a.length?Math.min(...a.map(x=>x.s)):null;$("p"+t).textContent=b==null?"—":b.toFixed(3)+"s"});
-let m=hist.length?Math.max(...hist.map(x=>x.m)):0;$("pmax").textContent=m?m+" km/h":"—"
+function resetAll(){
+ location.reload();
 }
 
-function accel(s){
- if(s<2){accStart=0;return}
- if(!accStart)accStart=performance.now();
- [20,40,60,100].forEach(v=>{
-  if(!accDone[v]&&s>=v){
-   accDone[v]=1;acc[v]=(performance.now()-accStart)/1000;$("a"+v).textContent=acc[v].toFixed(3)+"s"
-  }
- })
+function fullscreen(){
+ document.documentElement.requestFullscreen?.();
 }
-
-function update(p){
- let c=p.coords,s=sp(c.speed),prev=dist;
- $("sp").textContent=Math.round(s);ur(s);pts.push(s);if(pts.length>70)pts.shift();draw();
- if(s>max){max=s;$("mx").textContent=Math.round(s)}
- if(s>0){sum+=s;n++;$("av").textContent=Math.round(sum/n)}
- if(typeof c.accuracy=="number")$("ac").textContent=Math.round(c.accuracy)+"m";
- if(last){let d=hav(last,{lat:c.latitude,lon:c.longitude});if(d<.05)dist+=d;$("di").textContent=dist.toFixed(2)}
- last={lat:c.latitude,lon:c.longitude};
- accel(s);timer(s);
- if(typeof c.heading=="number"&&c.heading>=0){let a=["N","NE","E","SE","S","SW","W","NW"];$("hd").textContent=Math.round(c.heading)+"° "+a[Math.round(c.heading/45)%8]}
- $("gd").className="dot ok";$("gt").textContent="GPS"+(c.accuracy?" ±"+Math.round(c.accuracy)+"m":"")
-}
-
-function err(e){$("gd").className="dot bad";$("gt").textContent="GPS ERROR";$("nt").textContent="GPS tidak tersedia";$("np").textContent=e.code==1?"Izinkan lokasi untuk Chrome lalu reload halaman.":e.code==2?"Location belum tersedia.":"GPS timeout.";$("no").classList.add("show")}
-
-$("start").onclick=()=>{if(!isSecureContext&&location.hostname!="localhost"){err({code:2});return}if(!navigator.geolocation){err({code:2});return}navigator.geolocation.getCurrentPosition(()=>{if(wid!==null)navigator.geolocation.clearWatch(wid);wid=navigator.geolocation.watchPosition(update,err,{enableHighAccuracy:true,maximumAge:500,timeout:10000});$("start").textContent="GPS RUNNING"},err,{enableHighAccuracy:true,maximumAge:0,timeout:10000})};
-
-$("arm").onclick=()=>{if(!target){$("nt").textContent="Pilih target";$("np").textContent="Pilih 201m, 500m atau 1km dulu.";$("no").classList.add("show");return}armed=1;run=done=0;rs=dist;$("tm").textContent="0.000";$("ts").textContent="ARMED"};
-$("ct").onclick=clearT;
-document.querySelectorAll(".tg").forEach(b=>b.onclick=()=>setT(+b.dataset.m));
-
-$("reset").onclick=()=>{dist=max=sum=n=0;last=null;pts=[];accStart=0;accDone={20:0,40:0,60:0,100:0};$("sp").textContent="0";$("mx").textContent="0";$("av").textContent="0";$("di").textContent="0.00";$("hd").textContent="—";$("ac").textContent="—";[20,40,60,100].forEach(v=>$("a"+v).textContent="—");ur(0);clearT();draw()};
-
-$("csv").onclick=()=>{if(!hist.length){$("nt").textContent="Belum ada data";$("np").textContent="Selesaikan minimal satu run dulu.";$("no").classList.add("show");return}let c="Target,Time,Max Speed,Distance,Date\n"+hist.map(x=>`${x.t},${x.s},${x.m},${x.d},${x.time}`).join("\n"),a=document.createElement("a");a.href=URL.createObjectURL(new Blob([c],{type:"text/csv"}));a.download="ZX_V7_history.csv";a.click()};
-
-$("fs").onclick=async()=>{try{document.fullscreenElement?await document.exitFullscreen():await document.documentElement.requestFullscreen()}catch(e){}};
-$("ch")?.addEventListener("click",()=>{localStorage.removeItem("zxv7");hist=[];render()});
-
-async function bat(){try{let b=await navigator.getBattery(),f=()=>{$("bat").textContent=Math.round(b.level*100)+"%"+(b.charging?" ⚡":"")};f();b.onlevelchange=f;b.onchargingchange=f}catch(e){$("bat").textContent="N/A"}}
-
-ur(0);load();bat();draw();window.onresize=draw;
 </script>
-</body>
-</html>
